@@ -68,6 +68,14 @@ const statement = (invoice, plays) => {
 
 }
 
+const renderHtml = (invoice , plays) =>{
+
+  let data =  createStatementData(invoice, plays);
+
+  return renderStatementHtml(data);
+}
+
 module.exports = {
   statement,
+  renderHtml
 };

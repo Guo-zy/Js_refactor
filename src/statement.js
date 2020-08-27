@@ -49,7 +49,7 @@ function createStatementData(invoice, plays) {
   return data;
 }
 
-function rendeStatmentText(data){
+function renderStatmentText(data){
   let result = `Statement for ${data.customer}\n`;
   for(const perf of data.performances){
     result += `${data.plays[perf.playID].name}:${format(perf.thisAmount)} (${perf.audience} seats)\n`;
@@ -60,11 +60,11 @@ function rendeStatmentText(data){
 }
 
 
-function statement(invoice, plays) {
+const statement = (invoice, plays) => {
 
  let data =  createStatementData(invoice, plays);
 
-  return rendeStatmentText(data);
+  return renderStatmentText(data);
 
 }
 

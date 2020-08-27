@@ -75,6 +75,7 @@ test('Yancy test case3 : Yancy has one performance OOCL which no play tpye', t =
 });
 
 
+//Sample
 const invoice = {
     'customer': 'BigCo',
     'performances': [{

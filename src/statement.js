@@ -7,7 +7,7 @@ function format(Amount) {
   return format(Amount)
 }
 
-function calculateAmount(perf, play) {
+function calculateCurrentAmount(perf, play) {
   let thisAmount = 0;
   switch (play.type) {
     case 'tragedy':
@@ -29,31 +29,30 @@ function calculateAmount(perf, play) {
   return thisAmount
 }
 
-function calculateVolumeCredits(perf, play){
+function calculateVolumeCredits(perf, play) {
   let volumeCredits = 0;
   volumeCredits += Math.max(perf.audience - 30, 0);
   if ('comedy' === play.type) volumeCredits += Math.floor(perf.audience / 5);
   return volumeCredits;
 }
 
+function createStatementData(invoice, plays) {
+  let volumeCredits = 0;
+  let data = Object.assign([], invoice);
+  data.performances.map(perf => {
+    volumeCredits += calculateVolumeCredits(perf, plays[perf.playID])
+    perf.thisAmount = calculateCurrentAmount(perf, plays[perf.playID])
+  })
+  data.totalAmount = data.performances.reduce((total, perf) => total + perf.thisAmount, 0);
+  data.volumeCredits = volumeCredits
+}
+
 
 function statement(invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
+
+  createStatementData(invoice, plays);
+
   let result = `Statement for ${invoice.customer}\n`;
-
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
-    
-    let thisAmount = calculateAmount(perf , play)
-
-    volumeCredits += calculateVolumeCredits(perf, play);
-
-
-    result += ` ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
-    totalAmount += thisAmount;
-  }
-
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
 
